@@ -45,7 +45,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.534.0",
     "motion": "^12.23.11",
-    "next": "15.4.8",
+    "next": "15.5.27",
     "react": "^19.1.2",
     "react-dom": "^19.1.2",
     "react-syntax-highlighter": "^15.6.1",
