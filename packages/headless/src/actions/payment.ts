@@ -23,7 +23,7 @@ export async function verifyPayment(
         const transaction = await rpc
             .getTransaction(txSignature, {
                 encoding: 'jsonParsed',
-                maxSupportedTransactionVersion: 0,
+                maxSupportedTransactionVersion: 1 as any,
             })
             .send();
 

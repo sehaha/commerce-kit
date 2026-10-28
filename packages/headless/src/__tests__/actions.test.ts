@@ -386,6 +386,40 @@ describe('Payment Actions', () => {
                 expect(result.signature).toBe('test-signature');
             });
 
+            it('should request transaction with maxSupportedTransactionVersion: 1 to support version 1 transactions', async () => {
+                const mockTransaction = {
+                    blockTime: 1234567890,
+                    version: 1,
+                    transaction: {
+                        message: {
+                            accountKeys: [
+                                { pubkey: { toString: () => '9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM' } },
+                            ],
+                        },
+                    },
+                    meta: {
+                        preBalances: [0],
+                        postBalances: [1000000000],
+                    },
+                };
+
+                const mockSend = vi.fn().mockResolvedValue(mockTransaction);
+                mockRpc.getTransaction = vi.fn().mockReturnValue({
+                    send: mockSend,
+                });
+
+                const result = await verifyPayment(mockRpc, 'test-signature');
+
+                expect(mockRpc.getTransaction).toHaveBeenCalledWith(
+                    expect.anything(),
+                    expect.objectContaining({
+                        encoding: 'jsonParsed',
+                        maxSupportedTransactionVersion: 1,
+                    }),
+                );
+                expect(result.verified).toBe(true);
+            });
+
             it('should handle transaction not found', async () => {
                 mockRpc.getTransaction.mockReturnValue({
                     send: vi.fn().mockResolvedValue(null),
